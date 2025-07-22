@@ -1,10 +1,12 @@
-const initialState = {
+const { createStore, combineReducers } = require("redux");
+
+const initialStateAccount = {
   balance: 0,
   loan: 0,
   loanPurpose: "",
 };
 
-function reducer(state = initialState, action) {
+function accountReducer(state = initialStateCustomer, action) {
   switch (action.type) {
     case "account/deposit":
       return { ...state, balance: state.balance + action.payload };
@@ -25,3 +27,43 @@ function reducer(state = initialState, action) {
       return state;
   }
 }
+
+function deposit(amount) {
+  return { type: "account/deposit", payload: amount };
+}
+
+function withdraw(amount) {
+  return { type: "account/withdraw", payload: 300 };
+}
+
+store.dispatch(deposit(500));
+store.dispatch(withdraw(200));
+
+const initialStateCustomer = {
+  fullName: "",
+  nationalID: "",
+  createAt: "",
+}; 
+
+function createCustomer(fullName, nationalID) {
+  return {
+    type: "customer/createCustomer",
+    payload: { fullName, nationalID, createAt },
+  };
+}
+
+function customerReducer(state = initialStateCustomer, action) {
+  switch (action.type) {
+    case "customer/createCustomer":
+      return { ...state, fullName: action.payload.fullName };
+    default:
+      return state;
+  }
+}
+
+const rootReducer = combineReducers({
+  account: accountReducer,
+  customer: customerReducer,
+});
+
+const store = createStore(rootReducer);
